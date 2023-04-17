@@ -1,0 +1,22 @@
+---
+ - hosts: all
+   become: true
+   tasks:
+     - name: Updating your existing list of packages
+       shell:
+         sudo apt update
+     - name: Installing a few prerequisite packages which let apt use packages over HTTPS
+       shell:
+         sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
+     - name: Adding the GPG key for the official Docker repository to your system
+       shell:
+         curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+     - name: Adding the Docker repository to APT sources
+       shell:
+         sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable" -y
+     - name: Updatinig our package database with the Docker packages
+       shell:
+         apt-cache policy docker-ce
+     - name: Installing Docker
+       shell:
+         sudo apt install docker-ce -y
